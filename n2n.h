@@ -19,22 +19,22 @@
 #ifndef _N2N_H_
 #define _N2N_H_
 
-/*
-  tunctl -t tun0
-  tunctl -t tun1
-  ifconfig tun0 1.2.3.4 up
-  ifconfig tun1 1.2.3.5 up
-  ./edge -d tun0 -l 2000 -r 127.0.0.1:3000 -c hello
-  ./edge -d tun1 -l 3000 -r 127.0.0.1:2000 -c hello
+ /*
+   tunctl -t tun0
+   tunctl -t tun1
+   ifconfig tun0 1.2.3.4 up
+   ifconfig tun1 1.2.3.5 up
+   ./edge -d tun0 -l 2000 -r 127.0.0.1:3000 -c hello
+   ./edge -d tun1 -l 3000 -r 127.0.0.1:2000 -c hello
 
 
-  tunctl -u UID -t tunX
-*/
+   tunctl -u UID -t tunX
+ */
 
 
-/* #define N2N_CAN_NAME_IFACE */
+ /* #define N2N_CAN_NAME_IFACE */
 
-/* Moved here to define _CRT_SECURE_NO_WARNINGS before all the including takes place */
+ /* Moved here to define _CRT_SECURE_NO_WARNINGS before all the including takes place */
 #ifdef WIN32
 #include "win32/n2n_win32.h"
 #include "win32/winconfig.h"
@@ -86,10 +86,10 @@
 #define ETH_ADDR_LEN 6
 struct ether_hdr
 {
-  uint8_t  dhost[ETH_ADDR_LEN];
-  uint8_t  shost[ETH_ADDR_LEN];
-  uint16_t type;                /* higher layer protocol encapsulated */
-} __attribute__ ((__packed__));
+	uint8_t  dhost[ETH_ADDR_LEN];
+	uint8_t  shost[ETH_ADDR_LEN];
+	uint16_t type;                /* higher layer protocol encapsulated */
+} __attribute__((__packed__));
 
 typedef struct ether_hdr ether_hdr_t;
 
@@ -134,11 +134,11 @@ typedef struct ether_hdr ether_hdr_t;
 
 #ifndef WIN32
 typedef struct tuntap_dev {
-  int           fd;
-  uint8_t       mac_addr[6];
-  uint32_t      ip_addr, device_mask;
-  uint16_t      mtu;
-  char          dev_name[N2N_IFNAMSIZ];
+	int           fd;
+	uint8_t       mac_addr[6];
+	uint32_t      ip_addr, device_mask;
+	uint16_t      mtu;
+	char          dev_name[N2N_IFNAMSIZ];
 } tuntap_dev;
 
 #define SOCKET int
@@ -166,10 +166,10 @@ typedef struct tuntap_dev {
 
 #define DEFAULT_MTU   1390
 
-/** Uncomment this to enable the MTU check */
-//#define MTU_ASSERT_VALUE 1500
+ /** Uncomment this to enable the MTU check */
+ //#define MTU_ASSERT_VALUE 1500
 
-/** Common type used to hold stringified IP addresses. */
+ /** Common type used to hold stringified IP addresses. */
 typedef char ipstr_t[32];
 
 /** Common type used to hold stringified MAC addresses. */
@@ -177,14 +177,14 @@ typedef char ipstr_t[32];
 typedef char macstr_t[N2N_MACSTR_SIZE];
 
 struct peer_info {
-  n2n_mac_t           mac_addr;
-  n2n_sock_t          sock;
-  int                 timeout;
-  time_t              last_seen;
-  time_t              last_p2p;
-  time_t              last_sent_query;
+	n2n_mac_t           mac_addr;
+	n2n_sock_t          sock;
+	int                 timeout;
+	time_t              last_seen;
+	time_t              last_p2p;
+	time_t              last_sent_query;
 
-  UT_hash_handle hh; /* makes this structure hashable */
+	UT_hash_handle hh; /* makes this structure hashable */
 };
 
 #define HASH_ADD_PEER(head,add)                                                \
@@ -202,20 +202,20 @@ struct peer_info {
 typedef char n2n_sn_name_t[N2N_EDGE_SN_HOST_SIZE];
 
 typedef struct n2n_edge_conf {
-  n2n_sn_name_t       sn_ip_array[N2N_EDGE_NUM_SUPERNODES];
-  n2n_community_t     community_name;         /**< The community. 16 full octets. */
-  n2n_transform_t     transop_id;             /**< The transop to use. */
-  uint8_t             re_resolve_supernode_ip;
-  uint8_t             dyn_ip_mode;            /**< Interface IP address is dynamically allocated, eg. DHCP. */
-  uint8_t             allow_routing;          /**< Accept packet no to interface address. */
-  uint8_t             drop_multicast;         /**< Multicast ethernet addresses. */
-  uint8_t             allow_p2p;              /**< Allow P2P connection */
-  uint8_t             sn_num;                 /**< Number of supernode addresses defined. */
-  uint8_t             tos;                    /** TOS for sent packets */
-  char                *encrypt_key;
-  int                 register_interval;      /**< Interval for supernode registration, also used for UDP NAT hole punching. */
-  int                 local_port;
-  int                 mgmt_port;
+	n2n_sn_name_t       sn_ip_array[N2N_EDGE_NUM_SUPERNODES];
+	n2n_community_t     community_name;         /**< The community. 16 full octets. */
+	n2n_transform_t     transop_id;             /**< The transop to use. */
+	uint8_t             re_resolve_supernode_ip;
+	uint8_t             dyn_ip_mode;            /**< Interface IP address is dynamically allocated, eg. DHCP. */
+	uint8_t             allow_routing;          /**< Accept packet no to interface address. */
+	uint8_t             drop_multicast;         /**< Multicast ethernet addresses. */
+	uint8_t             allow_p2p;              /**< Allow P2P connection */
+	uint8_t             sn_num;                 /**< Number of supernode addresses defined. */
+	uint8_t             tos;                    /** TOS for sent packets */
+	char                *encrypt_key;
+	int                 register_interval;      /**< Interval for supernode registration, also used for UDP NAT hole punching. */
+	int                 local_port;
+	int                 mgmt_port;
 } n2n_edge_conf_t;
 
 typedef struct n2n_edge n2n_edge_t; /* Opaque, see edge_utils.c */
@@ -265,7 +265,7 @@ void traceEvent(int eventTraceLevel, char* file, int line, char * format, ...);
 
 /* Tuntap API */
 int tuntap_open(tuntap_dev *device, char *dev, const char *address_mode, char *device_ip,
-			char *device_mask, const char * device_mac, int mtu);
+	char *device_mask, const char * device_mac, int mtu);
 int tuntap_read(struct tuntap_dev *tuntap, unsigned char *buf, int len);
 int tuntap_write(struct tuntap_dev *tuntap, unsigned char *buf, int len);
 void tuntap_close(struct tuntap_dev *tuntap);
@@ -274,7 +274,7 @@ void tuntap_get_address(struct tuntap_dev *tuntap);
 /* Utils */
 char* intoa(uint32_t addr, char* buf, uint16_t buf_len);
 char* macaddr_str(macstr_t buf, const n2n_mac_t mac);
-int str2mac( uint8_t * outmac /* 6 bytes */, const char * s );
+int str2mac(uint8_t * outmac /* 6 bytes */, const char * s);
 uint8_t is_multi_broadcast(const uint8_t * dest_mac);
 char* msg_type2str(uint16_t msg_type);
 void hexdump(const uint8_t * buf, size_t len);
@@ -283,17 +283,17 @@ int is_empty_ip_address(const n2n_sock_t * sock);
 void print_edge_stats(const n2n_edge_t *eee);
 
 /* Sockets */
-char* sock_to_cstr( n2n_sock_str_t out,
-                            const n2n_sock_t * sock );
+char* sock_to_cstr(n2n_sock_str_t out,
+	const n2n_sock_t * sock);
 SOCKET open_socket(int local_port, int bind_any);
-int sock_equal( const n2n_sock_t * a,
-                       const n2n_sock_t * b );
+int sock_equal(const n2n_sock_t * a,
+	const n2n_sock_t * b);
 
 /* Operations on peer_info lists. */
-size_t purge_peer_list( struct peer_info ** peer_list,
-                        time_t purge_before );
-size_t clear_peer_list( struct peer_info ** peer_list );
-size_t purge_expired_registrations( struct peer_info ** peer_list, time_t* p_last_purge );
+size_t purge_peer_list(struct peer_info ** peer_list,
+	time_t purge_before);
+size_t clear_peer_list(struct peer_info ** peer_list);
+size_t purge_expired_registrations(struct peer_info ** peer_list, time_t* p_last_purge);
 
 /* Edge conf */
 void edge_init_conf_defaults(n2n_edge_conf_t *conf);
@@ -306,9 +306,9 @@ n2n_edge_t* edge_init(const tuntap_dev *dev, const n2n_edge_conf_t *conf, int *r
 void edge_term(n2n_edge_t *eee);
 int run_edge_loop(n2n_edge_t *eee, int *keep_running);
 int quick_edge_init(char *device_name, char *community_name,
-		    char *encrypt_key, char *device_mac,
-		    char *local_ip_address,
-		    char *supernode_ip_address_port,
-		    int *keep_on_running);
+	char *encrypt_key, char *device_mac,
+	char *local_ip_address,
+	char *supernode_ip_address_port,
+	int *keep_on_running);
 
 #endif /* _N2N_H_ */

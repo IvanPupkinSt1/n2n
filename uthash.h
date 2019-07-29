@@ -5,8 +5,8 @@ All rights reserved.
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:
 
-    * Redistributions of source code must retain the above copyright
-      notice, this list of conditions and the following disclaimer.
+	* Redistributions of source code must retain the above copyright
+	  notice, this list of conditions and the following disclaimer.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
 IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
@@ -62,7 +62,7 @@ do {                                                                            
 } while (0)
 #endif
 
-/* a number of the hash function use uint32_t which isn't defined on Pre VS2010 */
+   /* a number of the hash function use uint32_t which isn't defined on Pre VS2010 */
 #if defined(_WIN32)
 #if defined(_MSC_VER) && _MSC_VER >= 1600
 #include <stdint.h>
@@ -487,7 +487,7 @@ do {                                                                            
   HASH_FSCK(hh, head, "HASH_DELETE_HH");                                         \
 } while (0)
 
-/* convenience forms of HASH_FIND/HASH_ADD/HASH_DEL */
+ /* convenience forms of HASH_FIND/HASH_ADD/HASH_DEL */
 #define HASH_FIND_STR(head,findstr,out)                                          \
 do {                                                                             \
     unsigned _uthash_hfstr_keylen = (unsigned)uthash_strlen(findstr);            \
@@ -575,9 +575,9 @@ do {                                                                            
 #define HASH_FSCK(hh,head,where)
 #endif
 
-/* When compiled with -DHASH_EMIT_KEYS, length-prefixed keys are emitted to
- * the descriptor to which this macro is defined for tuning the hash function.
- * The app can #include <unistd.h> to get the prototype for write(2). */
+ /* When compiled with -DHASH_EMIT_KEYS, length-prefixed keys are emitted to
+  * the descriptor to which this macro is defined for tuning the hash function.
+  * The app can #include <unistd.h> to get the prototype for write(2). */
 #ifdef HASH_EMIT_KEYS
 #define HASH_EMIT_KEY(hh,head,keyptr,fieldlen)                                   \
 do {                                                                             \
@@ -589,7 +589,7 @@ do {                                                                            
 #define HASH_EMIT_KEY(hh,head,keyptr,fieldlen)
 #endif
 
-/* default to Jenkin's hash unless overridden e.g. DHASH_FUNCTION=HASH_SAX */
+  /* default to Jenkin's hash unless overridden e.g. DHASH_FUNCTION=HASH_SAX */
 #ifdef HASH_FUNCTION
 #define HASH_FCN HASH_FUNCTION
 #else
@@ -619,7 +619,7 @@ do {                                                                            
     hashv ^= (hashv << 5) + (hashv >> 2) + _hs_key[_sx_i];                       \
   }                                                                              \
 } while (0)
-/* FNV-1a variation */
+ /* FNV-1a variation */
 #define HASH_FNV(key,keylen,hashv)                                               \
 do {                                                                             \
   unsigned _fn_i;                                                                \
@@ -834,7 +834,7 @@ do {                                                                   \
 } while (0)
 #endif  /* HASH_USING_NO_STRICT_ALIASING */
 
-/* iterate over items in a known bucket to find desired item */
+ /* iterate over items in a known bucket to find desired item */
 #define HASH_FIND_IN_BKT(tbl,hh,head,keyptr,keylen_in,hashval,out)               \
 do {                                                                             \
   if ((head).hh_head != NULL) {                                                  \
@@ -976,9 +976,9 @@ do {                                                                            
 } while (0)
 
 
-/* This is an adaptation of Simon Tatham's O(n log(n)) mergesort */
-/* Note that HASH_SORT assumes the hash handle name to be hh.
- * HASH_SRT was added to allow the hash handle name to be passed in. */
+ /* This is an adaptation of Simon Tatham's O(n log(n)) mergesort */
+ /* Note that HASH_SORT assumes the hash handle name to be hh.
+  * HASH_SRT was added to allow the hash handle name to be passed in. */
 #define HASH_SORT(head,cmpfcn) HASH_SRT(hh,head,cmpfcn)
 #define HASH_SRT(hh,head,cmpfcn)                                                 \
 do {                                                                             \
@@ -1064,11 +1064,11 @@ do {                                                                            
   }                                                                              \
 } while (0)
 
-/* This function selects items from one hash into another hash.
- * The end result is that the selected items have dual presence
- * in both hashes. There is no copy of the items made; rather
- * they are added into the new hash through a secondary hash
- * hash handle that must be present in the structure. */
+  /* This function selects items from one hash into another hash.
+   * The end result is that the selected items have dual presence
+   * in both hashes. There is no copy of the items made; rather
+   * they are added into the new hash through a secondary hash
+   * hash handle that must be present in the structure. */
 #define HASH_SELECT(hh_dst, dst, hh_src, src, cond)                              \
 do {                                                                             \
   unsigned _src_bkt, _dst_bkt;                                                   \
@@ -1155,27 +1155,27 @@ for(((el)=(head)), ((tmp)=DECLTYPE(el)((head!=NULL)?(head)->hh.next:NULL));     
   (el) != NULL; ((el)=(tmp)), ((tmp)=DECLTYPE(el)((tmp!=NULL)?(tmp)->hh.next:NULL)))
 #endif
 
-/* obtain a count of items in the hash */
+   /* obtain a count of items in the hash */
 #define HASH_COUNT(head) HASH_CNT(hh,head)
 #define HASH_CNT(hh,head) ((head != NULL)?((head)->hh.tbl->num_items):0U)
 
 typedef struct UT_hash_bucket {
-   struct UT_hash_handle *hh_head;
-   unsigned count;
+	struct UT_hash_handle *hh_head;
+	unsigned count;
 
-   /* expand_mult is normally set to 0. In this situation, the max chain length
-    * threshold is enforced at its default value, HASH_BKT_CAPACITY_THRESH. (If
-    * the bucket's chain exceeds this length, bucket expansion is triggered).
-    * However, setting expand_mult to a non-zero value delays bucket expansion
-    * (that would be triggered by additions to this particular bucket)
-    * until its chain length reaches a *multiple* of HASH_BKT_CAPACITY_THRESH.
-    * (The multiplier is simply expand_mult+1). The whole idea of this
-    * multiplier is to reduce bucket expansions, since they are expensive, in
-    * situations where we know that a particular bucket tends to be overused.
-    * It is better to let its chain length grow to a longer yet-still-bounded
-    * value, than to do an O(n) bucket expansion too often.
-    */
-   unsigned expand_mult;
+	/* expand_mult is normally set to 0. In this situation, the max chain length
+	 * threshold is enforced at its default value, HASH_BKT_CAPACITY_THRESH. (If
+	 * the bucket's chain exceeds this length, bucket expansion is triggered).
+	 * However, setting expand_mult to a non-zero value delays bucket expansion
+	 * (that would be triggered by additions to this particular bucket)
+	 * until its chain length reaches a *multiple* of HASH_BKT_CAPACITY_THRESH.
+	 * (The multiplier is simply expand_mult+1). The whole idea of this
+	 * multiplier is to reduce bucket expansions, since they are expensive, in
+	 * situations where we know that a particular bucket tends to be overused.
+	 * It is better to let its chain length grow to a longer yet-still-bounded
+	 * value, than to do an O(n) bucket expansion too often.
+	 */
+	unsigned expand_mult;
 
 } UT_hash_bucket;
 
@@ -1184,47 +1184,47 @@ typedef struct UT_hash_bucket {
 #define HASH_BLOOM_SIGNATURE 0xb12220f2u
 
 typedef struct UT_hash_table {
-   UT_hash_bucket *buckets;
-   unsigned num_buckets, log2_num_buckets;
-   unsigned num_items;
-   struct UT_hash_handle *tail; /* tail hh in app order, for fast append    */
-   ptrdiff_t hho; /* hash handle offset (byte pos of hash handle in element */
+	UT_hash_bucket *buckets;
+	unsigned num_buckets, log2_num_buckets;
+	unsigned num_items;
+	struct UT_hash_handle *tail; /* tail hh in app order, for fast append    */
+	ptrdiff_t hho; /* hash handle offset (byte pos of hash handle in element */
 
-   /* in an ideal situation (all buckets used equally), no bucket would have
-    * more than ceil(#items/#buckets) items. that's the ideal chain length. */
-   unsigned ideal_chain_maxlen;
+	/* in an ideal situation (all buckets used equally), no bucket would have
+	 * more than ceil(#items/#buckets) items. that's the ideal chain length. */
+	unsigned ideal_chain_maxlen;
 
-   /* nonideal_items is the number of items in the hash whose chain position
-    * exceeds the ideal chain maxlen. these items pay the penalty for an uneven
-    * hash distribution; reaching them in a chain traversal takes >ideal steps */
-   unsigned nonideal_items;
+	/* nonideal_items is the number of items in the hash whose chain position
+	 * exceeds the ideal chain maxlen. these items pay the penalty for an uneven
+	 * hash distribution; reaching them in a chain traversal takes >ideal steps */
+	unsigned nonideal_items;
 
-   /* ineffective expands occur when a bucket doubling was performed, but
-    * afterward, more than half the items in the hash had nonideal chain
-    * positions. If this happens on two consecutive expansions we inhibit any
-    * further expansion, as it's not helping; this happens when the hash
-    * function isn't a good fit for the key domain. When expansion is inhibited
-    * the hash will still work, albeit no longer in constant time. */
-   unsigned ineff_expands, noexpand;
+	/* ineffective expands occur when a bucket doubling was performed, but
+	 * afterward, more than half the items in the hash had nonideal chain
+	 * positions. If this happens on two consecutive expansions we inhibit any
+	 * further expansion, as it's not helping; this happens when the hash
+	 * function isn't a good fit for the key domain. When expansion is inhibited
+	 * the hash will still work, albeit no longer in constant time. */
+	unsigned ineff_expands, noexpand;
 
-   uint32_t signature; /* used only to find hash tables in external analysis */
+	uint32_t signature; /* used only to find hash tables in external analysis */
 #ifdef HASH_BLOOM
-   uint32_t bloom_sig; /* used only to test bloom exists in external analysis */
-   uint8_t *bloom_bv;
-   uint8_t bloom_nbits;
+	uint32_t bloom_sig; /* used only to test bloom exists in external analysis */
+	uint8_t *bloom_bv;
+	uint8_t bloom_nbits;
 #endif
 
 } UT_hash_table;
 
 typedef struct UT_hash_handle {
-   struct UT_hash_table *tbl;
-   void *prev;                       /* prev element in app order      */
-   void *next;                       /* next element in app order      */
-   struct UT_hash_handle *hh_prev;   /* previous hh in bucket order    */
-   struct UT_hash_handle *hh_next;   /* next hh in bucket order        */
-   void *key;                        /* ptr to enclosing struct's key  */
-   unsigned keylen;                  /* enclosing struct's key len     */
-   unsigned hashv;                   /* result of hash-fcn(key)        */
+	struct UT_hash_table *tbl;
+	void *prev;                       /* prev element in app order      */
+	void *next;                       /* next element in app order      */
+	struct UT_hash_handle *hh_prev;   /* previous hh in bucket order    */
+	struct UT_hash_handle *hh_next;   /* next hh in bucket order        */
+	void *key;                        /* ptr to enclosing struct's key  */
+	unsigned keylen;                  /* enclosing struct's key len     */
+	unsigned hashv;                   /* result of hash-fcn(key)        */
 } UT_hash_handle;
 
 #endif /* UTHASH_H */

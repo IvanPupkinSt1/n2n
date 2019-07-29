@@ -26,22 +26,22 @@
 #define N2N_TRANSFORM_ID_MAX            65535
 
 typedef enum n2n_transform {
-  N2N_TRANSFORM_ID_INVAL = 0,
-  N2N_TRANSFORM_ID_NULL = 1,
-  N2N_TRANSFORM_ID_TWOFISH = 2,
-  N2N_TRANSFORM_ID_AESCBC = 3,
+	N2N_TRANSFORM_ID_INVAL = 0,
+	N2N_TRANSFORM_ID_NULL = 1,
+	N2N_TRANSFORM_ID_TWOFISH = 2,
+	N2N_TRANSFORM_ID_AESCBC = 3,
 } n2n_transform_t;
 
 struct n2n_trans_op;
 
-typedef int             (*n2n_transdeinit_f)( struct n2n_trans_op * arg );
-typedef void            (*n2n_transtick_f)( struct n2n_trans_op * arg, time_t now );
-typedef int             (*n2n_transform_f)( struct n2n_trans_op * arg,
-                                            uint8_t * outbuf,
-                                            size_t out_len,
-                                            const uint8_t * inbuf,
-                                            size_t in_len,
-                                            const n2n_mac_t peer_mac);
+typedef int(*n2n_transdeinit_f)(struct n2n_trans_op * arg);
+typedef void(*n2n_transtick_f)(struct n2n_trans_op * arg, time_t now);
+typedef int(*n2n_transform_f)(struct n2n_trans_op * arg,
+	uint8_t * outbuf,
+	size_t out_len,
+	const uint8_t * inbuf,
+	size_t in_len,
+	const n2n_mac_t peer_mac);
 
 /** Holds the info associated with a data transform plugin.
  *
@@ -50,16 +50,16 @@ typedef int             (*n2n_transform_f)( struct n2n_trans_op * arg,
  *  packet and consults its internal key lookup.
  */
 typedef struct n2n_trans_op {
-  void *              priv;   /* opaque data. Key schedule goes here. */
-  uint8_t             no_encryption; /* 1 if this transop does not perform encryption */
-  n2n_transform_t     transform_id;
-  size_t              tx_cnt;
-  size_t              rx_cnt;
+	void *              priv;   /* opaque data. Key schedule goes here. */
+	uint8_t             no_encryption; /* 1 if this transop does not perform encryption */
+	n2n_transform_t     transform_id;
+	size_t              tx_cnt;
+	size_t              rx_cnt;
 
-  n2n_transdeinit_f   deinit; /* destructor function */
-  n2n_transtick_f    tick;   /* periodic maintenance */
-  n2n_transform_f     fwd;    /* encode a payload */
-  n2n_transform_f     rev;    /* decode a payload */
+	n2n_transdeinit_f   deinit; /* destructor function */
+	n2n_transtick_f    tick;   /* periodic maintenance */
+	n2n_transform_f     fwd;    /* encode a payload */
+	n2n_transform_f     rev;    /* decode a payload */
 } n2n_trans_op_t;
 
 #endif /* #if !defined(N2N_TRANSFORMS_H_) */
