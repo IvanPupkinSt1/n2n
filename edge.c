@@ -652,13 +652,22 @@ int main(int argc, char* argv[]) {
 
 	traceEvent(TRACE_NORMAL, "Starting n2n edge %s %s", PACKAGE_VERSION, PACKAGE_BUILDDATE);
 
-	if ((argc >= 2) && (argv[1][0] != '-')) {
-		rc = loadFromFile(argv[1], &conf, &ec);
+	if ((argc >= 2) && (argv[1][0] == '-')) {
+		rc = loadFromCLI(argc, argv, &conf, &ec);
+	}
+	else {
+		char *conf_file =
+#ifdef WIN32
+			"edge.conf";
+#else
+			"/etc/n2n/edge.conf";
+#endif
+		if (argc >= 2)
+			conf_file = argv[1];
+		rc = loadFromFile(conf_file, &conf, &ec);
 		if (argc > 2)
 			rc = loadFromCLI(argc, argv, &conf, &ec);
 	}
-	else
-		rc = loadFromCLI(argc, argv, &conf, &ec);
 
 	if (rc < 0)
 		help();

@@ -989,7 +989,12 @@ int main(int argc, char * const argv[]) {
 		rc = loadFromCLI(argc, argv, &sss_node);
 	}
 	else {
-		char *conf_file = "supernode.conf";
+		char *conf_file =
+#ifdef WIN32
+			"supernode.conf";
+#else
+			"/etc/n2n/supernode.conf";
+#endif
 		if (argc >= 2)
 			conf_file = argv[1];
 		rc = loadFromFile(conf_file, &sss_node);
