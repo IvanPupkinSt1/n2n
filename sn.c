@@ -983,21 +983,24 @@ static void term_handler(int sig)
 int main(int argc, char * const argv[]) {
 	int rc;
 
-	if (argc == 1)
-		help();
-
 	init_sn(&sss_node);
 
-	if ((argc >= 2) && (argv[1][0] != '-')) {
-		rc = loadFromFile(argv[1], &sss_node);
+	if ((argc >= 2) && (argv[1][0] == '-')) {
+		rc = loadFromCLI(argc, argv, &sss_node);
+	}
+	else {
+		char *conf_file = "supernode.conf";
+		if (argc >= 2)
+			conf_file = argv[1];
+		rc = loadFromFile(conf_file, &sss_node);
 		if (argc > 2)
 			rc = loadFromCLI(argc, argv, &sss_node);
 	}
-	else
-		rc = loadFromCLI(argc, argv, &sss_node);
 
-	if (rc < 0)
+	if (rc < 0) {
+		help();
 		return(-1);
+	}
 
 #if defined(N2N_HAVE_DAEMON)
 	if (sss_node.daemon) {
